@@ -1,29 +1,6 @@
-#!/bin/bash
-# E2B VPS -- Made By NafiGamer
-
-R='\033[91m' G='\033[92m' Y='\033[93m' C='\033[96m' W='\033[97m' D='\033[2m' B='\033[1m' X='\033[0m'
-
-if ! command -v python3 &>/dev/null; then
-    echo -e "${R}[-] python3 not found${X}"
-    echo -e "  Install: ${C}sudo apt install python3 python3-pip${X}"
-    exit 1
-fi
-
-if ! python3 -c "import e2b" 2>/dev/null; then
-    echo -e "${Y}[!] e2b SDK not found${X}"
-    echo
-    echo -e "  Install with:"
-    echo -e "    ${C}pip install e2b${X}"
-    echo -e "    ${C}pip3 install e2b${X}"
-    echo
-    read -p "  Install now? (y/N): " yn
-    if [[ "$yn" =~ ^[Yy]$ ]]; then
-        echo
-        echo -e "${C}[*] installing e2b...${X}"
-        pip3 install e2b 2>/dev/null || pip install e2b 2>/dev/null || {                      echo -e "${R}[-] install failed${X}"                                              echo -e "  Run manually: ${C}pip install e2b${X}"                                 exit 1                                                                        }
+#!/bin/bash                                                                       # E2B SSH Terminal -- Made By NafiGamer                                                                                                                             R='\033[91m' G='\033[92m' Y='\033[93m' C='\033[96m' W='\033[97m' D='\033[2m' B='\033[1m' X='\033[0m'                                                                                                                                                  if ! command -v python3 &>/dev/null; then                                             echo -e "${R}[-] python3 not found${X}"                                           echo -e "  Install: ${C}sudo apt install python3 python3-pip${X}"                 exit 1                                                                        fi                                                                                                                                                                  if ! python3 -c "import e2b" 2>/dev/null; then                                        echo -e "${Y}[!] e2b SDK not found${X}"                                           echo                                                                              echo -e "  Install with:"                                                         echo -e "    ${C}pip install e2b${X}"                                             echo -e "    ${C}pip3 install e2b${X}"                                            echo                                                                              read -p "  Install now? (y/N): " yn                                               if [[ "$yn" =~ ^[Yy]$ ]]; then                                                        echo                                                                              echo -e "${C}[*] installing e2b...${X}"                                           pip3 install e2b 2>/dev/null || pip install e2b 2>/dev/null || {                      echo -e "${R}[-] install failed${X}"                                              echo -e "  Run manually: ${C}pip install e2b${X}"                                 exit 1                                                                        }
         echo -e "${G}[+] e2b installed${X}"
-        sleep 1
-    else
+        sleep 1                                                                       else
         exit 1
     fi
 fi                                                                                
