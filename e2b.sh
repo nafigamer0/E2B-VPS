@@ -1,18 +1,13 @@
 #!/bin/bash
-# E2B VPS — Made By NafiGamer
+# E2B VPS -- Made By NafiGamer
+
 cd "$(dirname "$0")"
-
-R='\033[91m' G='\033[92m' Y='\033[93m' C='\033[96m' W='\033[97m' D='\033[2m' B='\033[1m' X='\033[0m'
-
-if ! command -v python3 &>/dev/null; then
-    echo -e "${R}✗ python3 not found${X}"
+                                                                                  R='\033[91m' G='\033[92m' Y='\033[93m' C='\033[96m' W='\033[97m' D='\033[2m' B='\033[1m' X='\033[0m'
+                                                                                  if ! command -v python3 &>/dev/null; then                                             echo -e "${R}[!] python3 not found${X}"
     echo -e "  Install: ${C}sudo apt install python3 python3-pip${X}"
-    exit 1
-fi
+    exit 1                                                                        fi
 
-if ! python3 -c "import e2b" 2>/dev/null; then
-    echo -e "${Y}! e2b SDK not found${X}"
-    echo
+if ! python3 -c "import e2b" 2>/dev/null; then                                        echo -e "${Y}[!] e2b SDK not found${X}"                                           echo
     echo -e "  Install with:"
     echo -e "    ${C}pip install e2b${X}"
     echo -e "    ${C}pip3 install e2b${X}"
@@ -20,18 +15,17 @@ if ! python3 -c "import e2b" 2>/dev/null; then
     read -p "  Install now? (y/N): " yn
     if [[ "$yn" =~ ^[Yy]$ ]]; then
         echo
-        echo -e "${C}› installing e2b...${X}"
+        echo -e "${C}[*] installing e2b...${X}"
         pip3 install e2b 2>/dev/null || pip install e2b 2>/dev/null || {
-            echo -e "${R}✗ install failed${X}"
+            echo -e "${R}[!] install failed${X}"
             echo -e "  Run manually: ${C}pip install e2b${X}"
             exit 1
         }
-        echo -e "${G}✓ e2b installed${X}"
+        echo -e "${G}[+] e2b installed${X}"
         sleep 1
     else
-        exit 1
-    fi
-fi                                                                                                                                                                  export E2B_API_KEY="${E2B_API_KEY}"
+        exit 1                                                                        fi                                                                            fi                                                                                
+export E2B_API_KEY="${E2B_API_KEY}"
 
 TMP=$(mktemp /tmp/e2b_XXXXXX.py)
 trap 'rm -f "$TMP"' EXIT
@@ -58,10 +52,10 @@ def _print(p, c, m):
     codes = {"red":"\033[91m","green":"\033[92m","yellow":"\033[93m","cyan":"\033[96m","dim":"\033[2m","bold":"\033[1m","reset":"\033[0m"}
     col = codes.get(c, "")
     print(f"{col}{p}{C.reset}{m}" if not os.environ.get("NO_COLOR") else f"{p}{m}")
-def ok(m): _print("✓ ", "green", m)
-def warn(m): _print("! ", "yellow", m)
-def bad(m): _print("✗ ", "red", m)
-def info(m): _print("› ", "cyan", m)
+def ok(m): _print("[+] ", "green", m)
+def warn(m): _print("[!] ", "yellow", m)
+def bad(m): _print("[-] ", "red", m)
+def info(m): _print("[*] ", "cyan", m)
 def pause():
     try: input(color("  Press Enter to continue...", C.dim))
     except (EOFError, KeyboardInterrupt): pass
@@ -131,7 +125,7 @@ def change_api_key():
     print(color("╚══════════════════════════════════════════════════════════════════╝", C.cyan))
     print()
     if current:
-        masked = current[:8] + "•" * 12 + current[-4:] if len(current) > 12 else "•" * len(current)
+        masked = current[:8] + "." * 12 + current[-4:] if len(current) > 12 else "." * len(current)
         print(color("  Current key:", C.bold))
         print(f"  {color(masked, C.dim)}")
         print()
@@ -163,7 +157,7 @@ def change_api_key():
             boxes = []
             paginator = S.list()
             while paginator.has_next: boxes.extend(paginator.next_items())
-            ok(f"key valid — {len(boxes)} sandbox(es) found")
+            ok(f"key valid -- {len(boxes)} sandbox(es) found")
         except Exception as e:
             warn(f"could not validate: {e}")
             try: confirm = input("  Save anyway? (y/N): ").strip().lower()
@@ -190,7 +184,7 @@ def change_api_key():
             paginator = S.list()
             count = 0
             while paginator.has_next: count += len(paginator.next_items())
-            ok(f"key working — {count} sandbox(es) accessible")
+            ok(f"key working -- {count} sandbox(es) accessible")
         except Exception as e: bad(f"key failed: {e}")
     else: warn("invalid choice")
 def sid_of(sb): return str(getattr(sb, "sandbox_id", None) or getattr(sb, "id", None) or "unknown")
@@ -201,7 +195,7 @@ def connect(api_key, sandbox_id=None):
     sid = sandbox_id or get_current()
     if not sid:
         print(color("  Enter sandbox ID:", C.dim))
-        try: sid = input(color("  › ", C.bold)).strip()
+        try: sid = input(color("  > ", C.bold)).strip()
         except (EOFError, KeyboardInterrupt): return None
     if not sid: return None
     info(f"connecting to {sid[:16]}...")
@@ -271,7 +265,7 @@ def list_sandboxes(api_key):
     print(color("  └──────────────────────────────────────────────────────────────┘", C.cyan))
     print()
     print(color("    #    Sandbox ID                          Status       Template", C.bold))
-    print(color("    ────────────────────────────────────────────────────────────────", C.dim))
+    print(color("    ---------------------------------------------------------------", C.dim))
     for i, sb in enumerate(boxes, 1):
         try: inf = sb.get_info()
         except: inf = {}
@@ -286,7 +280,7 @@ def choose_sandbox(api_key):
     boxes = list_sandboxes(api_key)
     if not boxes: return None
     print(color("  Enter sandbox # or paste full sandbox ID", C.dim))
-    try: choice = input(color("  › ", C.bold)).strip()
+    try: choice = input(color("  > ", C.bold)).strip()
     except (EOFError, KeyboardInterrupt): return None
     if not choice: return None
     if choice.isdigit():
@@ -322,7 +316,7 @@ def action(api_key, name):
     elif name == "delete":
         print()
         print(color("  ┌──────────────────────────────────────────────────────────────┐", C.red))
-        print(color("  │", C.red) + color("                    ⚠  DELETE SANDBOX", C.bold + C.white) + color("                        │", C.red))
+        print(color("  │", C.red) + color("                    WARNING: DELETE SANDBOX", C.bold + C.white) + color("              │", C.red))
         print(color("  └──────────────────────────────────────────────────────────────┘", C.red))
         print()
         print(f"    Sandbox: {color(sid, C.yellow)}")
@@ -438,8 +432,8 @@ class VPSTerminal:
                 if stdout: print(stdout.rstrip("\n"))
                 if stderr: print(color(stderr.rstrip("\n"), C.red), file=sys.stderr)
                 elapsed = time.time() - start
-                if code == 0: print(color(f"  exit {code} · {elapsed:.2f}s", C.dim))
-                else: print(color(f"  exit {code} · {elapsed:.2f}s", C.red))
+                if code == 0: print(color(f"  exit {code} -- {elapsed:.2f}s", C.dim))
+                else: print(color(f"  exit {code} -- {elapsed:.2f}s", C.red))
             except Exception as e: bad(str(e))
         warn("Terminal closed. Sandbox is still running.")
     def _terminal_help(self):
@@ -495,7 +489,7 @@ def menu(api_key):
         print(f"    {color('k', C.cyan)}  manage API key")
         print()
         try:
-            choice = input(color("  › ", C.bold)).strip().lower()
+            choice = input(color("  > ", C.bold)).strip().lower()
         except (EOFError, KeyboardInterrupt):
             print(); print(); ok(f"bye {OWNER}"); print(); break
         if not choice: continue
@@ -526,7 +520,7 @@ def main():
     if not require_sdk(): return
     api_key = get_api_key()
     if not api_key: api_key = setup_api_key()
-    if not api_key: bad("no API key — cannot start"); return
+    if not api_key: bad("no API key -- cannot start"); return
     menu(api_key)
 if __name__ == "__main__": main()
 PYEOF
